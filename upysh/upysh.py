@@ -52,6 +52,7 @@ def head(f, n=10):
 
 def tail(f, n=10):
     with open(f) as f:
+        if n<=0: return
         a = [ "" for i in range(n) ]
         i = 0
         while True:
@@ -59,7 +60,7 @@ def tail(f, n=10):
             if not l: break
             a[i % n] = l
             i += 1
-        if (i < n):
+        if i>0 and i<n:
             for j in range(i+1):
                 sys.stdout.write(a[j])
         else:
