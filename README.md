@@ -1,3 +1,36 @@
+This fork is only intended to add new commands to [upysh/upysh.sh](blob/master/upysh/upysh.sh), like head() already, and wc() soon:
+~~~~
+$ ~/webrepl/webrepl_cli.py upysh.py 192.168.4.1:upysh_.py
+Password: 
+op:put, host:192.168.4.1, port:8266, passwd:abcd.
+upysh.py -> upysh_.py
+Remote WebREPL version: (1, 9, 4)
+Sent 2442 of 2442 bytes
+$ 
+$ webrepl_client.py 192.168.4.1
+Password: 
+
+WebREPL connected
+>>> 
+>>> 
+MicroPython v1.9.4-623-g34af10d2e on 2018-10-03; ESP32 module with ESP32
+Type "help()" for more information.
+>>> from upysh_ import *
+
+upysh is intended to be imported using:
+from upysh import *
+
+To see this help text again, type "man".
+
+upysh commands:
+pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...)
+newfile(...), mv("old", "new"), rm(...), mkdir(...), rmdir(...),
+clear
+
+>>> 
+~~~~
+
+
 micropython-lib
 ===============
 micropython-lib is a project to develop a non-monolothic standard library
