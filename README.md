@@ -1,4 +1,4 @@
-This fork is only intended to add new commands to [upysh/upysh.sh](upysh/upysh.sh), like head() already, and wc() soon:
+This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like head() already, and wc() soon:
 ~~~~
 $ ~/webrepl/webrepl_cli.py upysh.py 192.168.4.1:upysh_.py
 Password: 
