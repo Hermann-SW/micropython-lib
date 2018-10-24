@@ -1,4 +1,4 @@
-This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like head() already, and wc() soon:
+This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like head() and wc() already. For "wc()" upysh.py now imports "isword" module, which needs to be uploaded. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
 ~~~~
 $ ~/webrepl/webrepl_cli.py upysh.py 192.168.4.1:upysh_.py
 Password: 
@@ -6,6 +6,12 @@ op:put, host:192.168.4.1, port:8266, passwd:abcd.
 upysh.py -> upysh_.py
 Remote WebREPL version: (1, 9, 4)
 Sent 2442 of 2442 bytes
+$ ~/webrepl/webrepl_cli.py isword.py 192.168.4.1:
+Password: 
+op:put, host:192.168.4.1, port:8266, passwd:abcd.
+isword.py -> /isword.py
+Remote WebREPL version: (1, 9, 4)
+Sent 10781 of 10781 bytes
 $ 
 $ webrepl_client.py 192.168.4.1
 Password: 
@@ -13,7 +19,7 @@ Password:
 WebREPL connected
 >>> 
 >>> 
-MicroPython v1.9.4-623-g34af10d2e on 2018-10-03; ESP32 module with ESP32
+MicroPython v1.9.4-272-g46091b8a on 2018-07-18; ESP module with ESP8266
 Type "help()" for more information.
 >>> from upysh_ import *
 
@@ -27,6 +33,8 @@ pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...)
 newfile(...), mv("old", "new"), rm(...), mkdir(...), rmdir(...),
 clear
 
+>>> wc('upysh_.py')
+123 281 2440 upysh_.py
 >>> 
 ~~~~
 
