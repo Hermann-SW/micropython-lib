@@ -1,5 +1,16 @@
 import sys
 import os
+import isword
+
+def words(l):
+    state=False
+    w=0
+    for c in l:
+        if state!=isword._(ord(c)):
+            state=not(state)
+            if state:
+                w=w+1
+    return w
 
 class LS:
 
@@ -67,6 +78,17 @@ def tail(f, n=10):
             for j in range(n):
                 sys.stdout.write(a[(i%n)-n+j])
 
+def wc(fn):
+    with open(fn) as f:
+        c=r=w=0
+        while True:
+            l = f.readline()
+            if not l: break
+            r=r+1
+            c=c+len(bytes(l,'utf-8'))
+            w=w+words(l)
+    print(r,w,c,fn)
+
 def cat(f):
     head(f, 1 << 30)
 
@@ -91,7 +113,7 @@ from upysh import *
 To see this help text again, type "man".
 
 upysh commands:
-pwd, cd("new_dir"), ls, ls(...), head(...), tail,(...), cat(...)
+pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...)
 newfile(...), mv("old", "new"), rm(...), mkdir(...), rmdir(...),
 clear
 """)
