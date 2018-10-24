@@ -1,6 +1,6 @@
 fork-mission-statement
 ======================
-This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like head() and wc() already. For "wc()" upysh.py now imports "isword" module, which needs to be uploaded. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
+This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail() and wc() already. For "wc()" upysh.py now imports "isword" module, which needs to be uploaded. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
 ~~~~
 $ ~/webrepl/webrepl_cli.py upysh.py 192.168.4.1:upysh_.py
 Password: 
