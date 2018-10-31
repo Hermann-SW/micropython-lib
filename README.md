@@ -1,23 +1,15 @@
 fork-mission-statement
 ======================
-This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail() and wc() already. For "wc()" upysh.py now imports "isword" module, which needs to be uploaded. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
+This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail() and wc() already. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
 ~~~~
-$ ~/webrepl/webrepl_cli.py upysh.py 192.168.4.1:upysh_.py
-Password: 
+$ ~/webrepl/webrepl_cli.py -p abcd upysh.py 192.168.4.1:upysh_.py
 op:put, host:192.168.4.1, port:8266, passwd:abcd.
 upysh.py -> upysh_.py
 Remote WebREPL version: (1, 9, 4)
-Sent 2442 of 2442 bytes
-$ ~/webrepl/webrepl_cli.py isword.py 192.168.4.1:
-Password: 
-op:put, host:192.168.4.1, port:8266, passwd:abcd.
-isword.py -> /isword.py
-Remote WebREPL version: (1, 9, 4)
-Sent 10781 of 10781 bytes
+Sent 8715 of 8715 bytes
 $ 
-$ webrepl_client.py 192.168.4.1
+$ webrepl_client.py -p abcd 192.168.4.1
 Password: 
-
 WebREPL connected
 >>> 
 >>> 
@@ -36,8 +28,12 @@ newfile(...), mv("old", "new"), rm(...), mkdir(...), rmdir(...),
 clear
 
 >>> wc('upysh_.py')
-123 281 2440 upysh_.py
->>> 
+161 1251 8715 upysh_.py
+>>> exit
+### closed ###
+$ wc upysh.py
+ 161 1251 8715 upysh.py
+$ 
 ~~~~
 
 
