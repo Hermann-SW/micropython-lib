@@ -68,9 +68,7 @@ def grep(o, r, f):
         while True:
             l = f.readline()[:-1]
             if not l: break
-            if i:
-                l=l.lower()
-            if bool(re.match(r, l)) != v:
+            if bool(re.match(r, l.lower() if i else l)) != v:
                 sys.stdout.write(l+'\n')
 
 

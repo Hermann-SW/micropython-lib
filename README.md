@@ -40,16 +40,16 @@ first
   Fourth()
 >>> grep('i', 't', 'tst.txt')
 first
-third
-  fourth()
+ThirD
+  Fourth()
 >>> grep('iv', 'T', 'tst.txt')
 second().
 >>> wc('upysh_.py')
-193 1322 9390 upysh_.py
+191 1323 9364 upysh_.py
 >>> exit
 ### closed ###
 $ wc upysh.py
- 193 1322 9390 upysh.py
+ 191 1323 9364 upysh.py
 $ 
 ~~~~
 
