@@ -99,6 +99,14 @@ def head(f, n=10):
             if not l: break
             sys.stdout.write(l)
 
+def cp(s, t):
+    with open(s) as s:
+        with open(t, "w") as t:
+            while True:
+                l = s.readline()
+                if not l: break
+                t.write(l)
+
 def tail(f, n=10):
     with open(f) as f:
         if n<=0: return
@@ -151,9 +159,9 @@ from upysh import *
 To see this help text again, type "man".
 
 upysh commands:
-pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...)
-newfile(...), mv("old", "new"), rm(...), mkdir(...), rmdir(...),
-clear
+pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...),
+newfile(...), mv("old", "new"), cp("src", "tgt"),
+rm(...), mkdir(...), rmdir(...), clear
 """)
 
 man = Man()

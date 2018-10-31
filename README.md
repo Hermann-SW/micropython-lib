@@ -1,6 +1,6 @@
 fork-mission-statement
 ======================
-This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail() and wc() already. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
+This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail(), wc() and cp() already. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
 ~~~~
 $ ~/webrepl/webrepl_cli.py -p abcd upysh.py 192.168.4.1:upysh_.py
 op:put, host:192.168.4.1, port:8266, passwd:abcd.
