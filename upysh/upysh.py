@@ -53,13 +53,8 @@ def words(l):
 
 
 def grep(o, r, f):
-    i=False
-    v=False
-    for c in o:
-        if c=='i':
-            i=True
-        elif c=='v':
-            v=True
+    i="i" in o
+    v="v" in o
 
     with open(f) as f:
         r=".*"+r
