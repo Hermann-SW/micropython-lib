@@ -1,13 +1,7 @@
 fork-mission-statement
 ======================
-This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail(), wc() and cp() already. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
+This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail(), wc(), cp() and grep() already. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
 ~~~~
-$ ~/webrepl/webrepl_cli.py -p abcd upysh.py 192.168.4.1:upysh_.py
-op:put, host:192.168.4.1, port:8266, passwd:abcd.
-upysh.py -> upysh_.py
-Remote WebREPL version: (1, 9, 4)
-Sent 8715 of 8715 bytes
-$ 
 $ webrepl_client.py -p abcd 192.168.4.1
 Password: 
 WebREPL connected
@@ -15,6 +9,8 @@ WebREPL connected
 >>> 
 MicroPython v1.9.4-272-g46091b8a on 2018-07-18; ESP module with ESP8266
 Type "help()" for more information.
+>>> gc.collect(); gc.mem_free()
+28656
 >>> from upysh_ import *
 
 upysh is intended to be imported using:
@@ -23,16 +19,37 @@ from upysh import *
 To see this help text again, type "man".
 
 upysh commands:
-pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...)
-newfile(...), mv("old", "new"), rm(...), mkdir(...), rmdir(...),
-clear
+pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...),
+newfile(...), mv("old", "new"), cp("src", "tgt"), rm(...),
+grep("opt", "regex", "file"), mkdir(...), rmdir(...), clear
 
+>>> gc.collect(); gc.mem_free()
+22768
+>>> tail("boot.py",3)
+#sta_if.connect("MicroPython-5cd6ae", "12345678")
+
+#import drop
+>>> cp("boot.py", "x")
+>>> grep('', '\)$', 'tst.txt')
+  Fourth()
+>>> grep('', '\)', 'tst.txt')
+second().
+  Fourth()
+>>> grep('', 't', 'tst.txt')
+first
+  Fourth()
+>>> grep('i', 't', 'tst.txt')
+first
+third
+  fourth()
+>>> grep('iv', 'T', 'tst.txt')
+second().
 >>> wc('upysh_.py')
-161 1251 8715 upysh_.py
+193 1322 9390 upysh_.py
 >>> exit
 ### closed ###
 $ wc upysh.py
- 161 1251 8715 upysh.py
+ 193 1322 9390 upysh.py
 $ 
 ~~~~
 

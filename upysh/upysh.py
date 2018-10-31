@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 
 # sys.getsizeof(_p0)=1550
 # sys.getsizeof(_p1)=344
@@ -49,6 +50,29 @@ def words(l):
             if state:
                 w=w+1
     return w
+
+
+def grep(o, r, f):
+    i=False
+    v=False
+    for c in o:
+        if c=='i':
+            i=True
+        elif c=='v':
+            v=True
+
+    with open(f) as f:
+        r=".*"+r
+        if i:
+            r=r.lower()
+        while True:
+            l = f.readline()[:-1]
+            if not l: break
+            if i:
+                l=l.lower()
+            if bool(re.match(r, l)) != v:
+                sys.stdout.write(l+'\n')
+
 
 class LS:
 
@@ -160,8 +184,8 @@ To see this help text again, type "man".
 
 upysh commands:
 pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...),
-newfile(...), mv("old", "new"), cp("src", "tgt"),
-rm(...), mkdir(...), rmdir(...), clear
+newfile(...), mv("old", "new"), cp("src", "tgt"), rm(...),
+grep("opt", "regex", "file"), mkdir(...), rmdir(...), clear
 """)
 
 man = Man()
