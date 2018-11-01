@@ -67,6 +67,34 @@ def grep(o, r, f):
                 sys.stdout.write(l+'\n')
 
 
+def od(o, f):
+    c="c" in o
+    write=sys.stdout.write
+    with open(f) as f:
+        a = 0
+        while True:
+            l = f.read(0x10)
+            if not l: break
+            write("{0:0{1}x}".format(a,6))
+            a=a+0x10
+            if c:
+                for b in l:
+                    B=ord(b)
+                    if 0 < B < 7 or 13 < B < 32 or B > 126:
+                        write(" ")
+                        write("{0:0{1}o}".format(B,3))
+                    elif B > 31:
+                        write("   ")
+                        write(b)
+                    else:
+                        write("  \\"+"0......abtnvfr"[B])
+                write("\n      ")
+            for b in l:
+                write("  ")
+                write("{0:0{1}x}".format(ord(b),2))
+            write("\n")
+
+
 class LS:
 
     def __repr__(self):
@@ -178,7 +206,7 @@ To see this help text again, type "man".
 upysh commands:
 pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...),
 newfile(...), mv("old", "new"), cp("src", "tgt"), rm(...),
-grep("opt", "regex", "file"), mkdir(...), rmdir(...), clear
+grep("opt", "regex", "file"), od("opt", "file"), mkdir(...), rmdir(...), clear
 """)
 
 man = Man()
