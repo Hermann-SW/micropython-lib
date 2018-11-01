@@ -74,9 +74,9 @@ def od(o, f):
         a = 0
         while True:
             l = f.read(0x10)
-            if not l: break
             write("{0:0{1}x}".format(a,6))
-            a=a+0x10
+            if not l: write('\n'); break
+            a=a+len(l)
             if c:
                 for b in l:
                     B=ord(b)

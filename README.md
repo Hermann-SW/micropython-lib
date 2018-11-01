@@ -30,7 +30,7 @@ grep("opt", "regex", "file"), od("opt", "file"), mkdir(...), rmdir(...), clear
 
 >>> gc.collect(); m1=gc.mem_free()
 >>> print(m0, m1, m0-m1)
-28656 22336 6320
+28656 22288 6368
 >>> tail("tst.txt",3)
 second().
 ThirD
@@ -51,6 +51,7 @@ second().
 000000  66  69  72  73  74  0a  73  65  63  6f  6e  64  28  29  2e  0a
 000010  54  68  69  72  44  0a  20  20  46  6f  75  72  74  68  28  29
 000020  0a
+000021
 >>> od('c', '256.dat')
 000000  \0 001 002 003 004 005 006  \a  \b  \t  \n  \v  \f  \r 016 017
         00  01  02  03  04  05  06  07  08  09  0a  0b  0c  0d  0e  0f
@@ -84,13 +85,14 @@ second().
         e0  e1  e2  e3  e4  e5  e6  e7  e8  e9  ea  eb  ec  ed  ee  ef
 0000f0 360 361 362 363 364 365 366 367 370 371 372 373 374 375 376 377
         f0  f1  f2  f3  f4  f5  f6  f7  f8  f9  fa  fb  fc  fd  fe  ff
+000100
 >>> wc('upysh_.py')
-214 1390 10105 upysh_.py
+214 1391 10120 upysh_.py
 >>> exit
 ### closed ###
 $ 
 $ wc upysh.py
-  214  1390 10105 upysh.py
+  214  1391 10120 upysh.py
 $ 
 ~~~~
 
