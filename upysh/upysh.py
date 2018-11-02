@@ -52,11 +52,37 @@ def words(l):
     return w
 
 
+from io import IOBase
+from io import StringIO
+
+class _DUP(IOBase):
+
+    def __init__(self, s):
+        self.s = s
+
+    def write(self, data):
+        self.s += data
+        return len(data)
+
+    def readinto(self, data):
+        return 0
+
+def _openlambda(f):
+    if type(f) == type(lambda: x):
+        s = bytearray()
+        prev = os.dupterm(_DUP(s))
+        f()
+        os.dupterm(prev)
+        return StringIO(s)
+    else:
+        return open(f)
+
+
 def grep(o, r, f):
     i="i" in o
     v="v" in o
 
-    with open(f) as f:
+    with _openlambda(f) as f:
         r=".*"+r
         if i:
             r=r.lower()
@@ -70,7 +96,7 @@ def grep(o, r, f):
 def od(o, f):
     c="c" in o
     write=sys.stdout.write
-    with open(f) as f:
+    with _openlambda(f) as f:
         a = 0
         while True:
             l = f.read(0x10)
@@ -138,14 +164,14 @@ rm = os.remove
 rmdir = os.rmdir
 
 def head(f, n=10):
-    with open(f) as f:
+    with _openlambda(f) as f:
         for i in range(n):
             l = f.readline()
             if not l: break
             sys.stdout.write(l)
 
 def cp(s, t):
-    with open(s) as s:
+    with _openlambda(s) as s:
         with open(t, "w") as t:
             while True:
                 l = s.readline()
@@ -153,7 +179,7 @@ def cp(s, t):
                 t.write(l)
 
 def tail(f, n=10):
-    with open(f) as f:
+    with _openlambda(f) as f:
         if n<=0: return
         a = [ "" for i in range(n) ]
         i = 0
@@ -170,7 +196,7 @@ def tail(f, n=10):
                 sys.stdout.write(a[(i%n)-n+j])
 
 def wc(fn):
-    with open(fn) as f:
+    with _openlambda(fn) as f:
         c=r=w=0
         while True:
             l = f.readline()
@@ -199,9 +225,15 @@ class Man():
     def __repr__(self):
         return("""
 upysh is intended to be imported using:
-from upysh import *
+from upysh_ import *
 
 To see this help text again, type "man".
+
+upysh commands head/cat/tail/wc/cp/grep/od allow for lambda pipeing:
+  >>> tail(lambda: head('tst.txt', 3), 2)
+  second().
+  ThirD
+  >>>  
 
 upysh commands:
 pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...),

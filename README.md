@@ -1,6 +1,49 @@
 fork-mission-statement
 ======================
-This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail(), wc(), cp(), grep() and od() already. Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
+This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail(), wc(), cp(), grep() and od() already.
+
+These upysh commands support pipeing:
+head(), cat(), tail(), wc(), cp(), grep(), od()
+
+Instead of "cmd1 ... | cmd2 ..." use "cmd2(lambda: cmd1(...), ...)".
+
+Pipeing is useful to extract inner parts of a file:
+~~~~
+>>> tail(lambda: head('tst.txt', 3), 2)
+second().
+ThirD
+>>> 
+~~~~
+
+wc() has filename as last part normally:
+~~~~
+>>> wc(lambda: head('tst.txt', 3))
+3 3 25 <function <lambda> at 0x3fff07c0>
+>>> 
+~~~~
+
+Pipeing with cp() is useful to redirect any sys.stdout output into a file, like "help(hashlib) > ht.txt":
+~~~~
+>>> import hashlib
+>>> cp(lambda: help(hashlib), 'hl.txt')
+>>> cat('hl.txt')
+object <module 'uhashlib'> is of type module
+  __name__ -- uhashlib
+  sha256 -- <class 'sha256'>
+  sha1 -- <class 'sha1'>
+>>> 
+~~~~
+
+od() allows to debug arbitrary stuff. With it [issue #4285](https://github.com/micropython/micropython/issues/4285) was found and reported:
+~~~~
+>>> od('c', lambda: sys.stdout.write('abc'))
+000000   a   b   c
+        61  62  63
+000003
+>>> 
+~~~~
+
+Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
 ~~~~
 $ ~/webrepl/webrepl_cli.py -p abcd upysh.py 192.168.4.1:upysh_.py
 op:put, host:192.168.4.1, port:8266, passwd:abcd.
