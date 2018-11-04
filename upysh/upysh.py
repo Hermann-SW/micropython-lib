@@ -78,7 +78,7 @@ def _openlambda(f):
         return open(f)
 
 
-def grep(o, r, f):
+def grep(f, r, o=""):
     i="i" in o
     v="v" in o
 
@@ -93,7 +93,7 @@ def grep(o, r, f):
                 sys.stdout.write(l+'\n')
 
 
-def od(o, f):
+def od(f, o=""):
     c="c" in o
     write=sys.stdout.write
     with _openlambda(f) as f:
@@ -237,8 +237,8 @@ upysh commands head/cat/tail/wc/cp/grep/od allow for lambda pipeing:
 
 upysh commands:
 pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...),
-newfile(...), mv("old", "new"), cp("src", "tgt"), rm(...),
-grep("opt", "regex", "file"), od("opt", "file"), mkdir(...), rmdir(...), clear
+newfile(...), mv("old", "new"), cp("src", "tgt"), rm(...), clear
+grep("file", "regex" [, "opt"]), od("file" [, "opt"]), mkdir(...), rmdir(...)
 """)
 
 man = Man()

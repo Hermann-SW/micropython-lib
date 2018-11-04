@@ -36,7 +36,7 @@ object <module 'uhashlib'> is of type module
 
 od() allows to debug arbitrary stuff. With it [issue #4285](https://github.com/micropython/micropython/issues/4285) was found and reported:
 ~~~~
->>> od('c', lambda: sys.stdout.write('abc'))
+>>> od(lambda: sys.stdout.write('abc'), 'c')
 000000   a   b   c
         61  62  63
 000003
@@ -49,7 +49,7 @@ $ ~/webrepl/webrepl_cli.py -p abcd upysh.py 192.168.4.1:upysh_.py
 op:put, host:192.168.4.1, port:8266, passwd:abcd.
 upysh.py -> upysh_.py
 Remote WebREPL version: (1, 9, 4)
-Sent 10105 of 10105 bytes
+Sent 10766 of 10766 bytes
 $ 
 $ webrepl_client.py -p abcd 192.168.4.1
 Password: 
@@ -62,40 +62,46 @@ Type "help()" for more information.
 >>> from upysh_ import *
 
 upysh is intended to be imported using:
-from upysh import *
+from upysh_ import *
 
 To see this help text again, type "man".
 
+upysh commands head/cat/tail/wc/cp/grep/od allow for lambda pipeing:
+  >>> tail(lambda: head('tst.txt', 3), 2)
+  second().
+  ThirD
+  >>>  
+
 upysh commands:
 pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...),
-newfile(...), mv("old", "new"), cp("src", "tgt"), rm(...),
-grep("opt", "regex", "file"), od("opt", "file"), mkdir(...), rmdir(...), clear
+newfile(...), mv("old", "new"), cp("src", "tgt"), rm(...), clear
+grep("file", "regex" [, "opt"]), od("file" [, "opt"]), mkdir(...), rmdir(...)
 
 >>> gc.collect(); m1=gc.mem_free()
 >>> print(m0, m1, m0-m1)
-28656 22288 6368
+28656 21616 7040
 >>> tail("tst.txt",3)
 second().
 ThirD
   Fourth()
 >>> cp("boot.py", "x")
->>> grep('', '\)$', 'tst.txt')
+>>> grep('tst.txt', '\)$')
   Fourth()
->>> grep('', 't', 'tst.txt')
+>>> grep('tst.txt', 't')
 first
   Fourth()
->>> grep('i', 't', 'tst.txt')
+>>> grep('tst.txt', 't', 'i')
 first
 ThirD
   Fourth()
->>> grep('iv', 'T', 'tst.txt')
+>>> grep('tst.txt', 'T', 'iv')
 second().
->>> od('', 'tst.txt')
+>>> od('tst.txt')
 000000  66  69  72  73  74  0a  73  65  63  6f  6e  64  28  29  2e  0a
 000010  54  68  69  72  44  0a  20  20  46  6f  75  72  74  68  28  29
 000020  0a
 000021
->>> od('c', '256.dat')
+>>> od('256.dat','c')
 000000  \0 001 002 003 004 005 006  \a  \b  \t  \n  \v  \f  \r 016 017
         00  01  02  03  04  05  06  07  08  09  0a  0b  0c  0d  0e  0f
 000010 020 021 022 023 024 025 026 027 030 031 032 033 034 035 036 037
@@ -130,12 +136,11 @@ second().
         f0  f1  f2  f3  f4  f5  f6  f7  f8  f9  fa  fb  fc  fd  fe  ff
 000100
 >>> wc('upysh_.py')
-214 1391 10120 upysh_.py
+246 1457 10766 upysh_.py
 >>> exit
 ### closed ###
-$ 
 $ wc upysh.py
-  214  1391 10120 upysh.py
+  246  1457 10766 upysh.py
 $ 
 ~~~~
 
