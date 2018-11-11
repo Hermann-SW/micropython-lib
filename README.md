@@ -1,32 +1,35 @@
 fork-mission-statement
 ======================
-This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail(), wc(), cp(), grep() and od() already.
+This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail(), wc(), cp(), grep(), od() and tee() already.
 
-These upysh commands support pipeing:
-head(), cat(), tail(), wc(), cp(), grep(), od()
-
-Instead of "cmd1 ... | cmd2 ..." use "cmd2(lambda: cmd1(...), ...)".
-
-Pipeing is useful to extract inner parts of a file:
+Because of the many differences to upysh forked from, this version is named upysh_. Its pipelineing is based on part of [pipeto 0.2.1 project](https://pypi.org/project/pipeto/) whose development ended in 2013. pipeto allowed for 1-arg functions pipeing only, and is extended to arbitray number of arguments here. From upysh_ man:
 ~~~~
->>> tail(lambda: head('tst.txt', 3), 2)
-second().
-ThirD
->>> 
-~~~~
+...
+Most upysh_ commands allow for "producer|consumer" pipeing:
+  >>> pipe("tst.txt") | (head,3) | (tee,"3.txt") | (grep,'t','i') | done
+  first
+  ThirD
+  >>> pipe(lambda: micropython.qstr_info(1)) | (head,2) | done
+  qstr pool: n_pool=1, n_qstr=69, n_str_data_bytes=525, n_total_bytes=2141
+  Q(webrepl_cfg.py)
+  >>>
 
-wc() has filename as last part normally:
-~~~~
->>> wc(lambda: head('tst.txt', 3))
-3 3 25 <function <lambda> at 0x3fff07c0>
->>> 
+producer only:  man, ls, ls()[, pipe(filename)]
+         both:  head(), tail(), cat(), grep(), od(), tee()[, wc(), cp()]
+consumer only:  [done]
+...
 ~~~~
 
-Pipeing with cp() is useful to redirect any sys.stdout output into a file, like "help(hashlib) > ht.txt":
+Without pipeing you use command "cmdx(arg1,arg2)" just as is. When using in a pyileline use a tupel with 1st (pipeline) arg replaced by function name "... | (cmdx,arg2) | ...". For single arg command like wc() use 1-tuple "... | (wc,) | ...".
+
+Pipeline always starts with "pipe(...)". If argument is a filename, pipe starts with that file. Otherwise a lambda expression (only in pipe()) allows execution of arbitrary upysh_ commands or MicroPython functions and processing their output in the pipe).
+
+
+Pipeing with cp() is useful to redirect pipe data into a file, like "help(hashlib) > ht.txt":
 ~~~~
 >>> import hashlib
->>> cp(lambda: help(hashlib), 'hl.txt')
->>> cat('hl.txt')
+>>> pipe(lambda: help(hashlib)) | (cp,'hl.txt') | done
+>>> cat("hl.txt")
 object <module 'uhashlib'> is of type module
   __name__ -- uhashlib
   sha256 -- <class 'sha256'>
@@ -36,20 +39,25 @@ object <module 'uhashlib'> is of type module
 
 od() allows to debug arbitrary stuff. With it [issue #4285](https://github.com/micropython/micropython/issues/4285) was found and reported:
 ~~~~
->>> od(lambda: sys.stdout.write('abc'), 'c')
+>>> pipe(lambda: sys.stdout.write('abc')) | (od,'c') | done
 000000   a   b   c
         61  62  63
 000003
 >>> 
 ~~~~
 
-Since "upysh" module is already present on ESP32, this module needs to be renamed on upload:
+Since "upysh" module is already present on ESP32, this module needs to be renamed on upload, another reason for name "upysh_" for this fork. For systems with small RAM lazy import of module words.py has been implemented on first invocation of wc() command. On ESP-01s even that runs out of memory because temporary the import does need too much RAM. For such systems preloading words.py before importing upysh_ works:
 ~~~~
+$ ~/webrepl/webrepl_cli.py -p abcd words.py 192.168.4.1:
+op:put, host:192.168.4.1, port:8266, passwd:abcd.
+words.py -> /words.py
+Remote WebREPL version: (1, 9, 4)
+Sent 6464 of 6464 bytes
 $ ~/webrepl/webrepl_cli.py -p abcd upysh.py 192.168.4.1:upysh_.py
 op:put, host:192.168.4.1, port:8266, passwd:abcd.
 upysh.py -> upysh_.py
 Remote WebREPL version: (1, 9, 4)
-Sent 10766 of 10766 bytes
+Sent 6633 of 6633 bytes
 $ 
 $ webrepl_client.py -p abcd 192.168.4.1
 Password: 
@@ -59,27 +67,11 @@ WebREPL connected
 MicroPython v1.9.4-272-g46091b8a on 2018-07-18; ESP module with ESP8266
 Type "help()" for more information.
 >>> gc.collect(); m0=gc.mem_free()
+>>> import words
 >>> from upysh_ import *
-
-upysh is intended to be imported using:
-from upysh_ import *
-
-To see this help text again, type "man".
-
-upysh commands head/cat/tail/wc/cp/grep/od allow for lambda pipeing:
-  >>> tail(lambda: head('tst.txt', 3), 2)
-  second().
-  ThirD
-  >>>  
-
-upysh commands:
-pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...),
-newfile(...), mv("old", "new"), cp("src", "tgt"), rm(...), clear
-grep("file", "regex" [, "opt"]), od("file" [, "opt"]), mkdir(...), rmdir(...)
-
 >>> gc.collect(); m1=gc.mem_free()
 >>> print(m0, m1, m0-m1)
-28656 21616 7040
+18368 18384 -16
 >>> tail("tst.txt",3)
 second().
 ThirD
@@ -136,11 +128,11 @@ second().
         f0  f1  f2  f3  f4  f5  f6  f7  f8  f9  fa  fb  fc  fd  fe  ff
 000100
 >>> wc('upysh_.py')
-246 1457 10766 upysh_.py
+286 731 6633 upysh_.py
 >>> exit
 ### closed ###
 $ wc upysh.py
-  246  1457 10766 upysh.py
+ 286  731 6633 upysh.py
 $ 
 ~~~~
 

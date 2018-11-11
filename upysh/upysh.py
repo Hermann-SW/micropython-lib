@@ -2,60 +2,9 @@ import sys
 import os
 import re
 
-# sys.getsizeof(_p0)=1550
-# sys.getsizeof(_p1)=344
-#
-import array
+import io
 
-_0=array.array('H', [32, 126, 159, 887, 889, 894, 899, 906, 907, 908, 909, 929, 930, 1158, 1159, 1315, 1328, 1366, 1368, 1375, 1376, 1415, 1416, 1418, 1424, 1479, 1487, 1514, 1519, 1524, 1535, 1539, 1541, 1563, 1565, 1567, 1568, 1630, 1631, 1805, 1806, 1866, 1868, 1969, 1983, 2042, 2304, 2361, 2363, 2381, 2383, 2388, 2391, 2418, 2426, 2431, 2432, 2435, 2436, 2444, 2446, 2448, 2450, 2472, 2473, 2480, 2481, 2482, 2485, 2489, 2491, 2500, 2502, 2504, 2506, 2510, 2518, 2519, 2523, 2525, 2526, 2531, 2533, 2554, 2560, 2563, 2564, 2570, 2574, 2576, 2578, 2600, 2601, 2608, 2609, 2611, 2612, 2614, 2615, 2617, 2619, 2620, 2621, 2626, 2630, 2632, 2634, 2637, 2640, 2641, 2648, 2652, 2653, 2654, 2661, 2677, 2688, 2691, 2692, 2701, 2702, 2705, 2706, 2728, 2729, 2736, 2737, 2739, 2740, 2745, 2747, 2757, 2758, 2761, 2762, 2765, 2767, 2768, 2783, 2787, 2789, 2799, 2800, 2801, 2816, 2819, 2820, 2828, 2830, 2832, 2834, 2856, 2857, 2864, 2865, 2867, 2868, 2873, 2875, 2884, 2886, 2888, 2890, 2893, 2901, 2903, 2907, 2909, 2910, 2915, 2917, 2929, 2945, 2947, 2948, 2954, 2957, 2960, 2961, 2965, 2968, 2970, 2971, 2972, 2973, 2975, 2978, 2980, 2983, 2986, 2989, 3001, 3005, 3010, 3013, 3016, 3017, 3021, 3023, 3024, 3030, 3031, 3045, 3066, 3072, 3075, 3076, 3084, 3085, 3088, 3089, 3112, 3113, 3123, 3124, 3129, 3132, 3140, 3141, 3144, 3145, 3149, 3156, 3158, 3159, 3161, 3167, 3171, 3173, 3183, 3191, 3199, 3201, 3203, 3204, 3212, 3213, 3216, 3217, 3240, 3241, 3251, 3252, 3257, 3259, 3268, 3269, 3272, 3273, 3277, 3284, 3286, 3293, 3294, 3295, 3299, 3301, 3311, 3312, 3314, 3329, 3331, 3332, 3340, 3341, 3344, 3345, 3368, 3369, 3385, 3388, 3396, 3397, 3400, 3401, 3405, 3414, 3415, 3423, 3427, 3429, 3445, 3448, 3455, 3457, 3459, 3460, 3478, 3481, 3505, 3506, 3515, 3516, 3517, 3519, 3526, 3529, 3530, 3534, 3540, 3541, 3542, 3543, 3551, 3569, 3572, 3584, 3642, 3646, 3675, 3712, 3714, 3715, 3716, 3718, 3720, 3721, 3722, 3724, 3725, 3731, 3735, 3736, 3743, 3744, 3747, 3748, 3749, 3750, 3751, 3753, 3755, 3756, 3769, 3770, 3773, 3775, 3780, 3781, 3782, 3783, 3789, 3791, 3801, 3803, 3805, 3839, 3911, 3912, 3948, 3952, 3979, 3983, 3991, 3992, 4028, 4029, 4044, 4045, 4052, 4095, 4249, 4253, 4293, 4303, 4348, 4351, 4441, 4446, 4514, 4519, 4601, 4607, 4680, 4681, 4685, 4687, 4694, 4695, 4696, 4697, 4701, 4703, 4744, 4745, 4749, 4751, 4784, 4785, 4789, 4791, 4798, 4799, 4800, 4801, 4805, 4807, 4822, 4823, 4880, 4881, 4885, 4887, 4954, 4958, 4988, 4991, 5017, 5023, 5108, 5120, 5750, 5760, 5788, 5791, 5872, 5887, 5900, 5901, 5908, 5919, 5942, 5951, 5971, 5983, 5996, 5997, 6000, 6001, 6003, 6015, 6109, 6111, 6121, 6127, 6137, 6143, 6157, 6159, 6169, 6175, 6263, 6271, 6314, 6399, 6428, 6431, 6443, 6447, 6459, 6463, 6464, 6467, 6509, 6511, 6516, 6527, 6569, 6575, 6601, 6607, 6617, 6621, 6683, 6685, 6687, 6911, 6987, 6991, 7036, 7039, 7082, 7085, 7097, 7167, 7223, 7226, 7241, 7244, 7295, 7423, 7654, 7677, 7957, 7959, 7965, 7967, 8005, 8007, 8013, 8015, 8023, 8024, 8025, 8026, 8027, 8028, 8029, 8030, 8061, 8063, 8116, 8117, 8132, 8133, 8147, 8149, 8155, 8156, 8175, 8177, 8180, 8181, 8190, 8198, 8199, 8202, 8231, 8233, 8286, 8287, 8292, 8297, 8305, 8307, 8334, 8335, 8340, 8351, 8373, 8399, 8432, 8447, 8527, 8530, 8584, 8591, 9191, 9215, 9254, 9279, 9290, 9311, 9885, 9887, 9923, 9984, 9988, 9989, 9993, 9995, 10023, 10024, 10059, 10060, 10061, 10062, 10066, 10069, 10070, 10071, 10078, 10080, 10132, 10135, 10159, 10160, 10174, 10175, 10186, 10187, 10188, 10191, 11084, 11087, 11092, 11263, 11310, 11311, 11358, 11359, 11375, 11376, 11389, 11391, 11498, 11512, 11557, 11567, 11621, 11630, 11631, 11647, 11670, 11679, 11686, 11687, 11694, 11695, 11702, 11703, 11710, 11711, 11718, 11719, 11726, 11727, 11734, 11735, 11742, 11743, 11824, 11903, 11929, 11930, 12019, 12031, 12245, 12271, 12283, 12288, 12351, 12352, 12438, 12440, 12543, 12548, 12589, 12592, 12686, 12687, 12727, 12735, 12751, 12783, 12830, 12831, 12867, 12879, 13054, 13055, 19893, 19903, 40891, 40959, 42124, 42127, 42182, 42239, 42539, 42559, 42591, 42593, 42611, 42619, 42647, 42751, 42892, 43002, 43051, 43071, 43127, 43135, 43204, 43213, 43225, 43263, 43347, 43358, 43359, 43519, 43574, 43583, 43597, 43599, 43609, 43611, 43615, 44031, 55203, 57343, 64045, 64047, 64106, 64111, 64217, 64255, 64262, 64274, 64279, 64284, 64310, 64311, 64316, 64317, 64318, 64319, 64321, 64322, 64324, 64325, 64433, 64466, 64831, 64847, 64911, 64913, 64967, 65007, 65021, 65023, 65049, 65055, 65062, 65071, 65106, 65107, 65126, 65127, 65131, 65135, 65140, 65141, 65276, 65278, 65279, 65280, 65470, 65473, 65479, 65481, 65487, 65489, 65495, 65497, 65500, 65503, 65510, 65511, 65518, 65528, 65533, 65535])
-_1=array.array('H', [11, 12, 38, 39, 58, 59, 61, 62, 77, 79, 93, 127, 250, 255, 258, 262, 307, 310, 394, 399, 411, 463, 509, 639, 668, 671, 720, 767, 798, 799, 803, 815, 842, 895, 925, 926, 963, 967, 981, 1023, 1181, 1183, 1193, 2047, 2053, 2055, 2056, 2057, 2101, 2102, 2104, 2107, 2108, 2110, 2111, 2303, 2329, 2334, 2335, 2559, 2563, 2564, 2566, 2571, 2579, 2580, 2583, 2584, 2611, 2615, 2618, 2622, 2631, 2639, 2648, 8191, 9070, 9215, 9314, 9327, 9331, 53247, 53493, 53503, 53542, 53544, 53725, 53759, 53829, 54015, 54102, 54111, 54129, 54271, 54356, 54357, 54428, 54429, 54431, 54433, 54434, 54436, 54438, 54440, 54444, 54445, 54457, 54458, 54459, 54460, 54467, 54468, 54533, 54534, 54538, 54540, 54548, 54549, 54556, 54557, 54585, 54586, 54590, 54591, 54596, 54597, 54598, 54601, 54608, 54609, 54949, 54951, 55243, 55245, 55295, 61439, 61483, 61487, 61587, 65535])
-
-def _s(arr, i):
-    lft = 0
-    rgt = len(arr)-1
-    while lft+1 < rgt:
-        mid = (lft + rgt) // 2
-        if i <= arr[mid]:
-            rgt = mid
-        else:
-            lft = mid
-    return (lft % 2) if i<=arr[lft] else (rgt % 2)
-
-
-def _w(i):
-    if i>=0x030000:
-        if (i<0x0e0000):
-            return False
-        elif i>=0x0f0000:
-            return (i%65536)<0xfffe
-        else:
-            return (i==0x0e0001) | (0x0e0020<=i<=0x0e007f) | (0x0e0100<=i<=0x0e01ef)
-    elif i>=0x020000:
-        if i>=0x02f800:
-            return i<0x02fa1e
-        else:
-            return i<0x02a6d7
-    elif i>=0x010000:
-        return 1 - _s(_1, i%65536) 
-    else:
-        return _s(_0, i) 
-
-
-def words(l):
-    state=False
-    w=0
-    for c in l:
-        if state!=_w(ord(c)):
-            state=not(state)
-            if state:
-                w=w+1
-    return w
-
-
-from io import IOBase
-from io import StringIO
-
-class _DUP(IOBase):
+class _DUP(io.IOBase):
 
     def __init__(self, s):
         self.s = s
@@ -67,22 +16,58 @@ class _DUP(IOBase):
     def readinto(self, data):
         return 0
 
-def _openlambda(f):
-    if type(f) == type(lambda: x):
-        s = bytearray()
-        prev = os.dupterm(_DUP(s))
-        f()
-        os.dupterm(prev)
-        return StringIO(s)
+class _Pipe(object):
+    def __init__(self, val):
+        if type(val) == Man:
+            self.val = io.StringIO(val.__repr__())
+        elif type(val) == type(lambda: x):
+            s = bytearray()
+            prev = os.dupterm(_DUP(s))
+            val()
+            os.dupterm(prev)
+            self.val = io.StringIO(s)
+        else:
+            self.val = open(val)
+
+    def __or__(self, fn):
+        if fn == done:
+            if type(self.val) == io.TextIOWrapper:
+                print("".join(self.val.readlines()),end="")
+                return
+            elif type(self.val) == io.StringIO:
+                print(self.val.getvalue(),end="")
+                return
+            else:
+                return self.val
+        elif type(fn) == type( (0,) ):
+            if fn[0] == done:
+                return
+            self.val = fn[0]( * (self.val,) + fn[1:] )
+        else:
+            self.val = fn(self.val)
+        return self
+
+def pipe(arg):
+    return _Pipe(arg)
+
+def done(val, out=True):
+    return
+
+
+def _open(f):
+    if type(f) == io.TextIOWrapper or type(f) == io.StringIO:
+        return f 
     else:
         return open(f)
 
 
-def grep(f, r, o=""):
+def grep(f, r, o=""):     # "i" "v"
+    out = sys.stdout if type(f) == str else io.StringIO('')
+
     i="i" in o
     v="v" in o
 
-    with _openlambda(f) as f:
+    with _open(f) as f:
         r=".*"+r
         if i:
             r=r.lower()
@@ -90,35 +75,44 @@ def grep(f, r, o=""):
             l = f.readline()[:-1]
             if not l: break
             if bool(re.match(r, l.lower() if i else l)) != v:
-                sys.stdout.write(l+'\n')
+                out.write(l+'\n')
+
+    if out != sys.stdout:
+        out.seek(0,0)
+        return out
 
 
-def od(f, o=""):
+def od(f, o=""):    # "c"
+    out = sys.stdout if type(f) == str else io.StringIO('')
+
     c="c" in o
-    write=sys.stdout.write
-    with _openlambda(f) as f:
+    with _open(f) as f:
         a = 0
         while True:
             l = f.read(0x10)
-            write("{0:0{1}x}".format(a,6))
-            if not l: write('\n'); break
+            out.write("{0:0{1}x}".format(a,6))
+            if not l: out.write('\n'); break
             a=a+len(l)
             if c:
                 for b in l:
                     B=ord(b)
                     if 0 < B < 7 or 13 < B < 32 or B > 126:
-                        write(" ")
-                        write("{0:0{1}o}".format(B,3))
+                        out.write(" ")
+                        out.write("{0:0{1}o}".format(B,3))
                     elif B > 31:
-                        write("   ")
-                        write(b)
+                        out.write("   ")
+                        out.write(b)
                     else:
-                        write("  \\"+"0......abtnvfr"[B])
-                write("\n      ")
+                        out.write("  \\"+"0......abtnvfr"[B])
+                out.write("\n      ")
             for b in l:
-                write("  ")
-                write("{0:0{1}x}".format(ord(b),2))
-            write("\n")
+                out.write("  ")
+                out.write("{0:0{1}x}".format(ord(b),2))
+            out.write("\n")
+
+    if out != sys.stdout:
+        out.seek(0,0)
+        return out
 
 
 class LS:
@@ -164,22 +158,40 @@ rm = os.remove
 rmdir = os.rmdir
 
 def head(f, n=10):
-    with _openlambda(f) as f:
+    out = sys.stdout if type(f) == str else io.StringIO('')
+
+    with _open(f) as f:
         for i in range(n):
             l = f.readline()
             if not l: break
-            sys.stdout.write(l)
+            out.write(l)
+
+    if out != sys.stdout:
+        out.seek(0,0)
+        return out
 
 def cp(s, t):
-    with _openlambda(s) as s:
+    with _open(s) as s:
         with open(t, "w") as t:
             while True:
                 l = s.readline()
                 if not l: break
                 t.write(l)
 
+def tee(s, t, m="w"):       # "a"
+    with open(t, m) as t:
+        while True:
+            l = s.readline()
+            if not l: break
+            t.write(l)
+
+    s.seek(0,0)
+    return s
+
 def tail(f, n=10):
-    with _openlambda(f) as f:
+    out = sys.stdout if type(f) == str else io.StringIO('')
+
+    with _open(f) as f:
         if n<=0: return
         a = [ "" for i in range(n) ]
         i = 0
@@ -190,24 +202,44 @@ def tail(f, n=10):
             i += 1
         if i>0 and i<n:
             for j in range(i+1):
-                sys.stdout.write(a[j])
+                out.write(a[j])
         else:
             for j in range(n):
-                sys.stdout.write(a[(i%n)-n+j])
+                out.write(a[(i%n)-n+j])
 
-def wc(fn):
-    with _openlambda(fn) as f:
-        c=r=w=0
+    if out != sys.stdout:
+        out.seek(0,0)
+        return out
+
+wloaded = False
+
+def wc(fn):  # ,dummy=""):
+    global wloaded
+    if not(wloaded):
+        print("import words")
+        import words
+        wloaded = words
+
+    out = sys.stdout if type(fn) == str else io.StringIO('')
+
+    c=r=w=0
+    with _open(fn) as f:
         while True:
             l = f.readline()
             if not l: break
             r=r+1
             c=c+len(bytes(l,'utf-8'))
-            w=w+words(l)
-    print(r,w,c,fn)
+            w=w+wloaded.words(l)
+
+    f = fn if type(fn) == str else "(pipe)"  
+    out.write("{0:d} {1:d} {2:d} {3:s}\n".format(r,w,c,f))
+
+    if out != sys.stdout:
+        out.seek(0,0)
+        return out
 
 def cat(f):
-    head(f, 1 << 30)
+    return head(f, 1 << 30)
 
 def newfile(path):
     print("Type file contents line by line, finish with EOF (Ctrl+D).")
@@ -224,21 +256,29 @@ class Man():
 
     def __repr__(self):
         return("""
-upysh is intended to be imported using:
+upysh_ is intended to be imported using:
+[import words  (on systems with very small RAM)]
 from upysh_ import *
 
 To see this help text again, type "man".
 
-upysh commands head/cat/tail/wc/cp/grep/od allow for lambda pipeing:
-  >>> tail(lambda: head('tst.txt', 3), 2)
-  second().
+Most upysh_ commands allow for "producer|consumer" pipeing:
+  >>> pipe("tst.txt") | (head,3) | (tee,"3.txt") | (grep,'t','i') | done
+  first
   ThirD
-  >>>  
+  >>> pipe(lambda: micropython.qstr_info(1)) | (head,2) | done
+  qstr pool: n_pool=1, n_qstr=69, n_str_data_bytes=525, n_total_bytes=2141
+  Q(webrepl_cfg.py)
+  >>>
 
-upysh commands:
-pwd, cd("new_dir"), ls, ls(...), head(...), tail(...), wc(...), cat(...),
-newfile(...), mv("old", "new"), cp("src", "tgt"), rm(...), clear
-grep("file", "regex" [, "opt"]), od("file" [, "opt"]), mkdir(...), rmdir(...)
+producer only:  man, ls, ls()[, pipe(filename)]
+         both:  head(), tail(), cat(), grep(), od(), tee()[, wc(), cp()]
+consumer only:  [done]
+
+upysh_ commands:
+pwd, cd(new_dir), ls, ls(...), head(...), tail(...), wc(...), cat(...), clear
+newfile(...), mv(old, new), cp(src, tgt), tee(src, tgt [, opt]), rm(...)
+grep(file, regex [, opt]), od(file [, opt]), mkdir(...), rmdir(...)
 """)
 
 man = Man()
