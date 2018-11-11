@@ -2,7 +2,7 @@ fork-mission-statement
 ======================
 This fork is only intended to add new commands to [upysh/upysh.py](upysh/upysh.py), like tail(), wc(), cp(), grep(), od() and tee() already.
 
-Because of the many differences to upysh forked from, this version is named upysh_. Its pipelineing is based on part of [pipeto 0.2.1 project](https://pypi.org/project/pipeto/) whose development ended in 2013. pipeto allowed for 1-arg functions pipeing only, and is extended to arbitray number of arguments here. From upysh_ man:
+Because of the many differences to upysh repo forked from, this version is named upysh_. Its pipelineing is based on part of [pipeto 0.2.1 project](https://pypi.org/project/pipeto/) whose development ended in 2013. pipeto allowed for 1-arg function pipeing only, and is extended to arbitray number of arguments here. From upysh_ man:
 ~~~~
 ...
 Most upysh_ commands allow for "producer|consumer" pipeing:
@@ -22,10 +22,14 @@ consumer only:  [done]
 
 Without pipeing you use command "cmdx(arg1,arg2)" just as is. When using in a pyileline use a tupel with 1st (pipeline) arg replaced by function name "... | (cmdx,arg2) | ...". For single arg command like wc() use 1-tuple "... | (wc,) | ...".
 
-Pipeline always starts with "pipe(...)". If argument is a filename, pipe starts with that file. Otherwise a lambda expression (only in pipe()) allows execution of arbitrary upysh_ commands or MicroPython functions and processing their output in the pipe).
+Pipeline always starts with "pipe(...)". If argument is a filename, pipe starts with that file. Otherwise a lambda expression (only in pipe()) allows execution of arbitrary upysh_ commands or MicroPython functions and processing their output in the pipe.
+
+Pipeline always ends with done, either with showing pipe content by "... | done", or without by "... | (done,)".
+
+So shortest possible pipe is "pipe(filename) | done", which is equivalent to "cat(filename)".
 
 
-Pipeing with cp() is useful to redirect pipe data into a file, like "help(hashlib) > ht.txt":
+Pipeing with cp() (or tee()) is useful to redirect pipe data into a file, like "help(hashlib) > ht.txt":
 ~~~~
 >>> import hashlib
 >>> pipe(lambda: help(hashlib)) | (cp,'hl.txt') | done
@@ -39,10 +43,18 @@ object <module 'uhashlib'> is of type module
 
 od() allows to debug arbitrary stuff. With it [issue #4285](https://github.com/micropython/micropython/issues/4285) was found and reported:
 ~~~~
->>> pipe(lambda: sys.stdout.write('abc')) | (od,'c') | done
-000000   a   b   c
-        61  62  63
-000003
+>>> pipe(lambda: sys.stdout.write('foo\nbar')) | (od,'c') | done
+000000   f   o   o  \r  \n   b   a   r
+        66  6f  6f  0d  0a  62  61  72
+000008
+>>> pipe(lambda: sys.stdout.write('foo\r\nbar')) | (od,'c') | done
+000000   f   o   o  \r  \r  \n   b   a   r
+        66  6f  6f  0d  0d  0a  62  61  72
+000009
+>>> pipe(lambda: sys.stdout.write('foo\rbar')) | (od,'c') | done
+000000   f   o   o  \r   b   a   r
+        66  6f  6f  0d  62  61  72
+000007
 >>> 
 ~~~~
 
