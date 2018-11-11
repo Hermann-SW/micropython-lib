@@ -20,7 +20,7 @@ consumer only:  [done]
 ...
 ~~~~
 
-Without pipeing you use command "cmdx(arg1,arg2)" just as is. When using in a pyileline use a tupel with 1st (pipeline) arg replaced by function name "... | (cmdx,arg2) | ...". For single arg command like wc() use 1-tuple "... | (wc,) | ...".
+Without pipeing you use command "cmdx(arg1,arg2)" just as is. When using in a pipeline use a tupel with 1st (pipeline) arg replaced by function name "... | (cmdx,arg2) | ...". For single arg command like wc() use 1-tuple "... | (wc,) | ...".
 
 Pipeline always starts with "pipe(...)". If argument is a filename, pipe starts with that file. Otherwise a lambda expression (only in pipe()) allows execution of arbitrary upysh_ commands or MicroPython functions and processing their output in the pipe.
 
@@ -83,7 +83,7 @@ Type "help()" for more information.
 >>> from upysh_ import *
 >>> gc.collect(); m1=gc.mem_free()
 >>> print(m0, m1, m0-m1)
-18368 18384 -16
+28656 19776 8880
 >>> tail("tst.txt",3)
 second().
 ThirD
