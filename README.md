@@ -14,7 +14,7 @@ Most upysh_ commands allow for "producer|consumer" pipeing:
   Q(webrepl_cfg.py)
   >>>
 
-producer only:  man, ls, ls()[, pipe(filename)]
+producer only:  man, ls, ls()[, pipe()]
          both:  head(), tail(), cat(), grep(), od(), tee()[, wc(), cp()]
 consumer only:  [done]
 ...
